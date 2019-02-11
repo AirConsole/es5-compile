@@ -33,7 +33,7 @@ Only files ending in `.js` are included. If a file appears multiple times (e.g. 
 {
   "output": "output.js",
   "src": ["file1.js", "file2.js", "directory1", "directory2"],
-  "exlucde": ["directory1/bad_file.js", "directory2/bad_file_subdirectory"]
+  "exclude": ["directory1/bad_file.js", "directory2/bad_file_subdirectory"]
 }
 ```
 
