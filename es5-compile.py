@@ -83,6 +83,8 @@ def compile(js):
 
 def _getAllFiles(config, path):
   f = os.path.join(config.get("root", ""), path)
+  if path in config.get("exclude", ""):
+    return
   if os.path.exists(f):
     if not os.path.isdir(f):
       if f.lower().endswith(".js"):
