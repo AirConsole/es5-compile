@@ -62,3 +62,14 @@ Only files ending in `.js` are included. If a file appears multiple times (e.g. 
 ```
 
 `namespace` is a mapping from filename to an additional namespace prefix. For example, `engine.io.js` would export its module in the global namespace under `eio`. The config above would export it under `BiggerLib.eio`
+
+### Debugging
+
+```
+{
+  "output": "output.js",
+  "compile": false
+}
+```
+
+If you set `compile` to `false` then the files are not compiled, but only concatenated into one big file. Convenient for debugging.
