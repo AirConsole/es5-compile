@@ -20,6 +20,8 @@ def build(config=None):
       root = os.path.dirname(config)
       config = json.load(open(config))
       config["root"] = root
+    else:
+      raise Exception("No build.json found in " + config)
 
   js = _concat(config)
   es5 = True
@@ -35,8 +37,8 @@ def build(config=None):
     if os.path.exists(fp):
       candidate = open(fp).read()
       if candidate.startswith(checksum):
-        print "No changes"
-        return candidate
+        print "Already compiled"
+        return
     elif not os.path.exists(os.path.dirname(config["output"])):
       os.makedirs(os.path.join(config.get("root"),
                                os.path.dirname(config["output"])))
@@ -107,6 +109,8 @@ def _concat(config):
   sources = config.get("src", "src")
   if isinstance(sources, basestring):
     sources = [sources]
+  if not isinstance(sources, list):
+    raise "No source specified"
   seen = set([])
   for src in sources:
     for file in sorted(_getAllFiles(config, src, seen)):
@@ -138,7 +142,6 @@ if __name__ == "__main__":
   if args[0] == "python":
     args = args[1:]
   if len(args) == 1:
-    print "Usage 1: build.py path_to_source_directory"
-    print "Usage 2: build.py path_to_build_config"
+    print "Usage: build.py path_to_build_config.json"
   else:
     build(args[1])
