@@ -81,7 +81,10 @@ def compile(js):
                     str(response.status_code))
   return out
 
-def _getAllFiles(config, path):
+def _getAllFiles(config, path, seen):
+  if path in seen:
+    return
+  seen.add(path)
   f = os.path.join(config.get("root", ""), path)
   if path in config.get("exclude", ""):
     return
@@ -91,7 +94,7 @@ def _getAllFiles(config, path):
         yield path
     else:
       for file in os.listdir(f):
-        for sub in _getAllFiles(config, os.path.join(path,file)):
+        for sub in _getAllFiles(config, os.path.join(path,file), seen):
           yield sub
   else:
     raise Exception("Source does not exist: " + path)
@@ -104,8 +107,9 @@ def _concat(config):
   sources = config.get("src", "src")
   if isinstance(sources, basestring):
     sources = [sources]
+  seen = set([])
   for src in sources:
-    for file in sorted(_getAllFiles(config, src)):
+    for file in sorted(_getAllFiles(config, src, seen)):
       f = os.path.join(config.get("root", ""), file)
       print "Include: " + file
       if "namespace" in config and file in config["namespace"]:
